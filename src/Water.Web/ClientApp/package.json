@@ -6,12 +6,14 @@
   "scripts": {
     "build_proto": ".\\node_modules\\grpc-tools\\bin\\protoc --js_out=import_style=commonjs:src/protos --grpc-web_out=import_style=typescript,mode=grpcweb:src/protos -I ../../Shared/Protos char.proto",
     "dev": "npm run build_proto && vite",
+    "dev vite": "vite",
     "build": "npm run build_proto && run-p type-check \"build-only {@}\" --",
     "preview": "npm run build_proto && vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "element-plus": "^2.4.3",
     "google-protobuf": "^3.21.2",
     "pinia": "^2.1.7",

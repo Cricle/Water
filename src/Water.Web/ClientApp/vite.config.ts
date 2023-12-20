@@ -22,5 +22,19 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server:{
+    port:8080,
+    open:true,
+    proxy:{
+      // 使用 proxy 实例
+      '/api': {
+        target: 'https://water.hualala.me/',
+        changeOrigin: true,
+        configure: (proxy, options) => {
+          // proxy 是 'http-proxy' 的实例
+        }
+      }
+    }
   }
 })
