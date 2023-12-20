@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package Water;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto"; 
+
+message EmptyRequest{
+
+}
+message RequestRequest{
+    //The user id
+    string Name = 1;
+    //With text
+    string WithText=2;
+    //End of time for msg active
+    google.protobuf.Duration Deadline=3;
+    //Start time
+    google.protobuf.Timestamp StartTime=4;
+
+    uint32 ResultId=5;
+}
+message EndRequestData{
+    RequestRequest Request=1;
+    repeated string Joined=2;
+}
+
+message RequestResponse{
+    uint32 ResultId=1;
+}
+
+message CancelRequest{
+    string Name = 1;
+    uint32 ResultId=2;
+}
+message CancelResponse{
+    uint32 ResultId=1;
+    bool Result = 2;
+}
+message AcceptOrRefuseRequest{    
+    string Name = 1;
+    uint32 ResultId=2;
+}
+enum AcceptResultType{
+    Succeed=0;
+    NoSession=1;
+    AlreadyJoined=2;
+}
+message AcceptOrRefuseResult{    
+    string Name = 1;
+    uint32 ResultId=2;
+    int32 TotalCount=3;
+    AcceptResultType ResultType=4;
+}
+enum MsgType{
+    Start=0;
+    Cancel=1;
+    Accept=2;
+    Refuse=3;
+    EndOfSession=4;
+}
+message MsgResponse{
+    MsgType Type = 1;
+    bytes Body = 2;
+}
+message GetSessionRequest{    
+    uint32 ResultId=1;
+}
+enum GWaterSessionState{
+    WaitingState = 0;
+    RunningState = 1;
+    CancelState=2;
+    EndState = 3;
+}
+message GetSessionResponse{
+    uint32 Id=1;
+    string Owner=2;
+    string WithText=3;
+    google.protobuf.Timestamp StartTime=4;
+    GWaterSessionState State=5;
+    repeated string Joined=6;
+    bool Succeed=7;
+}
+service CharService {
+    rpc Start (RequestRequest) returns (RequestResponse);
+    rpc Cancel (CancelRequest) returns (CancelResponse);
+    rpc Accept (AcceptOrRefuseRequest) returns (AcceptOrRefuseResult);
+    rpc Refuse (AcceptOrRefuseRequest) returns (AcceptOrRefuseResult);
+    rpc GetSession (GetSessionRequest) returns (GetSessionResponse);
+    rpc Msg (EmptyRequest) returns (stream MsgResponse);
+}

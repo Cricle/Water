@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package Water;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/duration.proto"; 
+
+message UserAndPwdRequest{
+    string username = 1;
+    string password = 2;
+}
+
+enum LoginResult{
+    LoginSucceed=0;
+    LoginPasswordOrUserNameError=1;
+}
+
+message LoginResponse{
+    string token = 1;
+    int id=2;
+    LoginResult result=3;
+    google.protobuf.Timestamp expireTime = 4;
+}
+
+enum RegistResult{
+    RegistSucceed=0;
+    RegistPasswordShort=1;
+}
+
+message RegistResponse{
+    RegistResult result=1;
+}
+message GetTokenInfoRequest{
+    string token=1;
+}
+message GetTokenInfoResponse{
+    string token=1;
+    bool isExpire=2;
+    google.protobuf.Timestamp expireTime = 3;
+}
+message LogoutRequest{
+    string token=1;
+}
+message EmptyRequest{
+
+}
+service UserService {
+    rpc Login (UserAndPwdRequest) returns (LoginResponse);
+    rpc Regist (UserAndPwdRequest) returns (RegistResponse);
+    rpc GetTokenInfo (RegistResponse) returns (GetTokenInfoResponse);
+    rpc Logout (LogoutRequest) returns (EmptyRequest);
+    //TODO: user info
+}
