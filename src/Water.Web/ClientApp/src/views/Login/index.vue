@@ -1,14 +1,139 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from "vue";
+import loginBg1 from "@/assets/svg/login-bg1.svg";
+import type { FormInstance, FormRules } from "element-plus";
 
-const activeIndex = ref('1')
-const activeIndex2 = ref('1')
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
+const ruleFormRef = ref<FormInstance>();
+
+const validatePass = (rule: any, value: any, callback: any) => {
+  if (value === "") {
+    callback(new Error("Please input the password"));
+  } else {
+    callback();
+  }
+};
+
+const ruleForm = reactive({
+  password: "",
+  userName: "",
+});
+
+const rules = reactive<FormRules<typeof ruleForm>>({
+  password: [{ validator: validatePass, trigger: "blur" }],
+});
+
+const submitForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.validate((valid) => {
+    if (valid) {
+      console.log("submit!");
+    } else {
+      console.log("error submit!");
+      return false;
+    }
+  });
+};
+
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.resetFields();
+};
 </script>
 
-
 <template>
-    
+  <div class="login flex">
+    <!-- <el-image fit="cover" class="login-img" :src=loginBg></el-image> -->
+    <div class="login-content">
+      <div class="content-left flex">
+        <p class="title">Welcome!</p>
+        <p class="title1">Sign in to your Account</p>
+      </div>
+      <div class="content-right flex">
+        <el-form
+          class="login-form"
+          ref="ruleFormRef"
+          status-icon
+          :rules="rules"
+          label-width="120px"
+        >
+          <el-form-item label="UserName" prop="userName">
+            <el-input v-model="ruleForm.userName" autocomplete="off" />
+          </el-form-item>
+          <el-form-item label="Password" prop="password">
+            <el-input
+              v-model="ruleForm.password"
+              type="password"
+              autocomplete="off"
+            />
+          </el-form-item>
+          <el-form-item class="submit-btn">
+            <el-button type="primary" @click="submitForm(ruleFormRef)"
+              >Submit</el-button
+            >
+            <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+  </div>
 </template>
+
+<style scoped lang="scss">
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  min-width: 900px;
+  min-height: 500px;
+  background-image: url("../../assets/svg/login-bg.svg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: bottom;
+
+  .login-content {
+    background-color: rgba($color: #fff, $alpha: 0.8);
+    width: 800px;
+    height: 500px;
+    box-shadow: 0 0 10px 0 #eee;
+    border-radius: 4px;
+    display: flex;
+    // position: relative;
+    background-image: url("../../assets/svg/login-bg1.svg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: top;
+    .content-left {
+      width: 200px;
+      flex-direction: column;
+      height: 100%;
+      .title {
+        font-size: 20px;
+        color: #0aa3ef;
+        font-weight: bold;
+      }
+      .title1 {
+        color: #0aa3ef9d;
+      }
+    }
+    .content-right {
+      width: 600px;
+      .login-form {
+        width: 90%;
+        padding-top: 80px;
+      }
+    }
+  }
+}
+::v-deep {
+  .submit-btn {
+    .el-form-item__content {
+      justify-content: center;
+    }
+  }
+}
+</style>

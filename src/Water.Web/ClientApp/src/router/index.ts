@@ -11,7 +11,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'Main',
       component: Main,
       children: [
         { path: '/', name: 'Home', component: Home },
@@ -43,6 +43,10 @@ const router = createRouter({
       component: Login
     },
   ]
+})
+
+router.beforeEach((to,from,next)=>{
+  next()
 })
 
 export default router
