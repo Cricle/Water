@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import loginBg1 from "@/assets/svg/login-bg1.svg";
 import type { FormInstance, FormRules } from "element-plus";
+import { useRouter } from 'vue-router'
 
 const ruleFormRef = ref<FormInstance>();
-
-const validatePass = (rule: any, value: any, callback: any) => {
-  if (value === "") {
-    callback(new Error("Please input the password"));
-  } else {
-    callback();
-  }
-};
+const router = useRouter()
 
 const ruleForm = reactive({
   password: "",
@@ -19,7 +12,8 @@ const ruleForm = reactive({
 });
 
 const rules = reactive<FormRules<typeof ruleForm>>({
-  password: [{ validator: validatePass, trigger: "blur" }],
+  userName: [{ message: "请输入用户名", required: true }],
+  password: [{ message: "请输入密码", required: true }],
 });
 
 const submitForm = (formEl: FormInstance | undefined) => {
@@ -27,16 +21,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       console.log("submit!");
+      router.push({path:'/'})
     } else {
       console.log("error submit!");
       return false;
     }
   });
-};
-
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.resetFields();
 };
 </script>
 
@@ -54,6 +44,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
           ref="ruleFormRef"
           status-icon
           :rules="rules"
+          :model="ruleForm"
           label-width="120px"
         >
           <el-form-item label="UserName" prop="userName">
@@ -67,10 +58,13 @@ const resetForm = (formEl: FormInstance | undefined) => {
             />
           </el-form-item>
           <el-form-item class="submit-btn">
-            <el-button type="primary" @click="submitForm(ruleFormRef)"
-              >Submit</el-button
+            <!-- <el-button @click="resetForm(ruleFormRef)">清空</el-button> -->
+            <el-button
+              class="btn"
+              type="primary"
+              @click="submitForm(ruleFormRef)"
+              >登录</el-button
             >
-            <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -129,11 +123,14 @@ const resetForm = (formEl: FormInstance | undefined) => {
     }
   }
 }
-::v-deep {
-  .submit-btn {
-    .el-form-item__content {
-      justify-content: center;
-    }
+:deep(.submit-btn) {
+  .el-form-item__content {
+    justify-content: center;
+  }
+
+  .btn{
+    margin-top: 20px;
+    width: 70%;
   }
 }
 </style>

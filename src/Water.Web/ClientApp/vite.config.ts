@@ -24,7 +24,7 @@ export default defineConfig({
     }
   },
   server:{
-    port:8080,
+    port:8888,
     open:true,
     proxy:{
       // 使用 proxy 实例

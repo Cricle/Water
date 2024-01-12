@@ -38,6 +38,13 @@ const props = withDefaults(
         path: "/User",
         position:'right'
       },
+      {
+        key: "4",
+        label: "",
+        icon: "SwitchButton",
+        path: "/Login",
+        // position:'right'
+      },
     ],
   }
 );
@@ -56,7 +63,7 @@ const activeIndex = ref("/");
       <template v-if="item.position === 'right'">
         <div class="flex-grow" ></div>
         <el-menu-item :key="item.key" :index="item.path">
-          <el-icon><component :is="item.icon" /></el-icon>
+          <el-icon><component :title="item.label" :is="item.icon" /></el-icon>
           <span>{{ item.label }}</span>
         </el-menu-item>
       </template>

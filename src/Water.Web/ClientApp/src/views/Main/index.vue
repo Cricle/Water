@@ -4,7 +4,7 @@ import Menu from "./Menu/index.vue";
 </script>
 
 <template>
-  <div class="Main">
+  <div class="main">
     <header><Menu></Menu></header>
     <main class="content">
       <RouterView></RouterView>
@@ -12,8 +12,12 @@ import Menu from "./Menu/index.vue";
   </div>
 </template>
 
-<style scoped>
-.Main .content{
-    padding:10px
+<style lang="scss" scoped>
+.main {
+  height: 100%;
+  .content {
+    height: calc(100% - 84px);
+    padding: 12px;
+  }
 }
 </style>
